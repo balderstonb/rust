@@ -1,4 +1,6 @@
 use std::collections::HashMap;
+use std::hash::Hash;
+use std::cmp::Eq;
 
 fn main() {
     let v = vec![1, 1, 2, 3, 3, 4, 4, 4];
@@ -31,16 +33,15 @@ fn median(vals: &[u32]) -> f32 {
     }
 }
 
-fn mode(vals: &[u32]) -> u32 {
+fn mode<T>(vals: &[T]) -> &T where T: Eq + Hash {
     let mut counts = HashMap::new();
 
     for i in vals {
-        let count = counts.entry(i).or_insert(0);
-        *count += 1;
+       *counts.entry(i).or_insert(0) += 1;
     }
 
     let mut count_vec: Vec<_> = counts.iter().collect();
     count_vec.sort_by(|a,b| b.1.cmp(a.1));
 
-    **count_vec[0].0
+    *count_vec[0].0
 }
